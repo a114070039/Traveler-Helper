@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traveler helper| </title>
+    <style>
+        /* 基礎設定與配色 */
+        :root {
+            --primary-blue: #4fc3f7;
+            --light-blue: #e1f5fe;
+            --mint-green: #81c784;
+            --light-mint: #e8f5e9;
+            --text-main: #37474f;
+            --text-light: #78909c;
+            --white: #ffffff;
+            --gray-bg: #f5f7fa;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+            background-color: var(--gray-bg);
+            line-height: 1.6;
+        }
+
+        /* 導覽列 */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            margin-left: 2rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--mint-green);
+        }
+
+        .login-btn {
+            background-color: var(--mint-green);
+            color: var(--white) !important;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+        }
+
+        /* 英雄區塊 (Hero Section) */
+        .hero {
+            background: linear-gradient(rgba(79, 195, 247, 0.7), rgba(129, 199, 132, 0.7)), url('https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+            color: var(--white);
+            text-align: center;
+            padding: 6rem 1rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            max-width: 680px;
+            margin: 0.75rem auto 0;
+            color: rgba(255,255,255,0.92);
+        }
+
+        /* 主要內容區塊 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        /* 互動表單網格 (Step 1 & Step 2) */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin: -3rem auto 0;
+            max-width: 760px;
+            width: calc(100% - 2rem);
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+        }
+
+        .card h2 {
+            color: var(--primary-blue);
+            margin-top: 0;
+            font-size: 1.3rem;
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 0.5rem;
+        }
+
+        /* 邀請碼小工具 */
+        .invite-box {
+            text-align: center;
+            background-color: var(--light-blue);
+        }
+        
+        .invite-code {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-main);
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            letter-spacing: 2px;
+            border: 2px dashed var(--primary-blue);
+        }
+
+        .btn-copy {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 0.95rem 1.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 320px;
+        }
+        .form-group input[type="number"] {
+            width: 160px;
+            max-width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .social-shares {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-shares span {
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        /* 偏好測驗表單 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .budget-slider {
+            width: 100%;
+        }
+
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .amenities-grid label {
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--gray-bg);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        /* 熱門預訂 */
+        .popular-section {
+            margin-top: 4rem;
+        }
+        
+        .booking-grid {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .booking-grid::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .booking-grid::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.15);
+            border-radius: 999px;
+        }
+
+        .booking-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            min-width: 300px;
+            max-width: 340px;
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+        }
+
+        .booking-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .booking-info {
+            padding: 1.5rem;
+        }
+
+        .recommendation-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .recommendation-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1rem;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+
+        .recommendation-card h4 {
+            margin: 0 0 0.5rem;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        .recommendation-card p {
+            margin: 0.25rem 0;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .recommendation-card a {
+            display: inline-block;
+            margin-top: 0.75rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* 簡單四步驟 */
+        .process-section {
+            margin-top: 4rem;
+            text-align: center;
+            background-color: var(--light-mint);
+            padding: 4rem 2rem;
+            border-radius: 12px;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step-icon {
+            font-size: 3rem;
+            background: var(--white);
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            color: var(--mint-green);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* 頁尾 */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--white);
+            color: var(--text-light);
+            margin-top: 4rem;
+            border-top: 1px solid #eaeaea;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .action-grid, .booking-grid, .process-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Traveler helper</div>
+    </nav>
+
+    <header class="hero">
+        <h1>Plan the Perfect Getaway with Traveler Helper!</h1>
+    </header>
+
+    <main class="container">
+        
+        <section class="action-grid">
+            <div class="card">
+                <h2>Personalize Your Adventure</h2>
+                
+                <div class="form-group">
+                    <label>1. 每人每晚的理想預算？ (NT$)</label>
+                    <input id="budget-slider" type="range" min="1000" max="10000" step="500" value="3000" class="budget-slider" list="budget-ticks">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+                        <div style="flex:1;">
+                            <datalist id="budget-ticks">
+                                <option value="1000"></option>
+                                <option value="2000"></option>
+                                <option value="3000"></option>
+                                <option value="4000"></option>
+                                <option value="5000"></option>
+                                <option value="6000"></option>
+                                <option value="7000"></option>
+                                <option value="8000"></option>
+                                <option value="9000"></option>
+                                <option value="10000"></option>
+                            </datalist>
+                            <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#666;">
+                                <span>$1,000</span>
+                                <span>$10,000+</span>
+                            </div>
+                        </div>
+                        <div style="min-width:110px; text-align:right; font-weight:600; color:var(--primary-blue);">當前：<span id="budget-value">NT$3,000</span></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>2. 旅遊地點？</label>
+                    <select id="trip-location">
+                        <option value="台北">台北</option>
+                        <option value="台中">台中</option>
+                        <option value="台南">台南</option>
+                        <option value="高雄">高雄</option>
+                        <option value="花蓮">花蓮</option>
+                        <option value="宜蘭">宜蘭</option>
+                        <option value="澎湖">澎湖</option>
+                        <option value="墾丁">墾丁</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>3. 旅遊天數？</label>
+                    <input id="trip-days" type="number" min="1" max="7" value="3" style="width:100px; padding:0.8rem; border:1px solid #ccc; border-radius:6px;">
+                </div>
+
+                <div class="form-group">
+                    <label>4. 偏好的住宿氛圍？</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <label><input type="radio" name="vibe"> 🎉 熱鬧社交</label>
+                        <label><input type="radio" name="vibe"> 🧘 寧靜放鬆</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>5. 行程必須包含什麼活動？</label>
+                    <div class="amenities-grid">
+                        <label><input type="checkbox" class="activity-checkbox" value="KTV"> 🎤 唱歌/KTV/夜生活</label>
+                        <label><input type="checkbox" class="activity-checkbox" value="water"> 🌊 水上活動/浮潛/海邊</label>
+                        <label><input type="checkbox" class="activity-checkbox" value="hiking"> 🏔️ 登山/健行/自然探索</label>
+                        <label><input type="checkbox" class="activity-checkbox" value="spa"> ♨️ 溫泉/SPA/放鬆療癒</label>
+                        <label><input type="checkbox" class="activity-checkbox" value="bbq"> 🍖 烤肉/BBQ/戶外野炊</label>
+                        <label><input type="checkbox" class="activity-checkbox" value="culture"> 🎨 文化/藝術/古蹟</label>
+                        <label><input type="checkbox" class="activity-checkbox" value="food"> 🍽️ 美食/品食/夜市</label>
+                        <label><input type="checkbox" class="activity-checkbox" value="photo"> 📸 打卡/拍照/景觀景點</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>6. 您的旅遊夥伴是？</label>
+                    <select id="group-type">
+                        <option>選擇群組類型...</option>
+                        <option>朋友</option>
+                        <option>跨代家族</option>
+                        <option>情侶/夫妻</option>
+                        <option>獨旅</option>
+                    </select>
+                </div>
+                <button id="generate-itinerary" class="btn-copy">生成行程</button>
+                <div id="itinerary-result" class="card" style="display:none; margin-top:1rem;"></div>
+            </div>
+        </section>
+
+        <section class="popular-section">
+            <h2 style="text-align: center; color: var(--primary-blue);">熱門景點推薦</h2>
+            <div class="booking-grid">
+                <div class="booking-card">
+                    <img src="https://images.unsplash.com/photo-1513860704561-0398f7b8a07b?auto=format&fit=crop&w=800&q=80" alt="九份老街">
+                    <div class="booking-info">
+                        <h3>九份老街 & 基隆海鮮</h3>
+                        <p>搭配山城景觀與夜市小吃，適合半日遊和美食行程。</p>
+                    </div>
+                </div>
+                <div class="booking-card">
+                    <img src="https://images.unsplash.com/photo-1518307252465-60c1dfb2de71?auto=format&fit=crop&w=800&q=80" alt="台南安平古堡">
+                    <div class="booking-info">
+                        <h3>台南安平古堡 & 赤崁樓</h3>
+                        <p>古城文化、美食小吃和文青打卡，適合夫妻、家庭與朋友同遊。</p>
+                    </div>
+                </div>
+                <div class="booking-card">
+                    <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="墾丁海邊">
+                    <div class="booking-info">
+                        <h3>墾丁海濱 & 夜市</h3>
+                        <p>海邊浪漫落日、海鮮美食和夜市逛街，適合放鬆假期。</p>
+                    </div>
+                </div>
+                <div class="booking-card">
+                    <img src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="花蓮太魯閣">
+                    <div class="booking-info">
+                        <h3>花蓮太魯閣 & 清水斷崖</h3>
+                        <p>山海景觀結合自然步道與在地小吃，是賞景與放鬆的首選。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="process-section">
+            <h2 style="color: var(--primary-blue); margin-top: 0;">簡單四步驟，快速完成行程</h2>
+            <div class="process-grid">
+                <div>
+                    <div class="step-icon">1️⃣</div>
+                    <h4>選擇目的地</h4>
+                </div>
+                <div>
+                    <div class="step-icon">2️⃣</div>
+                    <h4>設定預算與天數</h4>
+                </div>
+                <div>
+                    <div class="step-icon">3️⃣</div>
+                    <h4>挑選旅遊偏好</h4>
+                </div>
+                <div>
+                    <div class="step-icon">4️⃣</div>
+                    <h4>立即生成行程</h4>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Traveler helper. All rights reserved.</p>
+        <p>Follow us: 📱 📸 🐦</p>
+    </footer>
+
+        <script>
+        // budget slider display and init
+        const slider = document.getElementById('budget-slider');
+        const budgetValue = document.getElementById('budget-value');
+        function fmt(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+        if(slider && budgetValue){
+            budgetValue.textContent = `NT$${fmt(slider.value)}`;
+            slider.addEventListener('input', ()=> budgetValue.textContent = `NT$${fmt(slider.value)}`);
+        }
+
+        const webSuggestions = [
+            {
+                title: '台北九份老街與基隆海鮮半日遊',
+                location: '台北 / 基隆',
+                price: 'from NT$1,200 per adult',
+                rating: '4.9',
+                category: 'Food',
+                url: 'https://www.example.com/taipei-jiufen-food-tour'
+            },
+            {
+                title: '花蓮太魯閣一日遊：峽谷、清水斷崖與便當',
+                location: '花蓮',
+                price: 'from NT$1,800 per adult',
+                rating: '5.0',
+                category: 'Outdoors',
+                url: 'https://www.example.com/hualien-taroko-day-trip'
+            },
+            {
+                title: '台中彩虹眷村 + 逢甲夜市慢活一日遊',
+                location: '台中',
+                price: 'from NT$1,100 per adult',
+                rating: '4.8',
+                category: 'Culture',
+                url: 'https://www.example.com/taichung-rainbow-village-tour'
+            },
+            {
+                title: '高雄旗津海岸電動車 + 佛陀紀念館半日遊',
+                location: '高雄',
+                price: 'from NT$1,000 per adult',
+                rating: '4.9',
+                category: 'Water',
+                url: 'https://www.example.com/kaohsiung-cijin-bike-tour'
+            },
+            {
+                title: '宜蘭羅東林場與傳藝中心文化體驗',
+                location: '宜蘭',
+                price: 'from NT$1,300 per adult',
+                rating: '5.0',
+                category: 'Culture',
+                url: 'https://www.example.com/yilan-traditional-arts-tour'
+            },
+            {
+                title: '台北淡水漁人碼頭夕陽與老街美食半日遊',
+                location: '台北',
+                price: 'from NT$1,100 per adult',
+                rating: '4.8',
+                category: 'Food',
+                url: 'https://www.example.com/taipei-tamsui-sunset-food-tour'
+            },
+            {
+                title: '台南府城古蹟與夜市美食半日遊',
+                location: '台南',
+                price: 'from NT$1,050 per adult',
+                rating: '4.9',
+                category: 'Culture',
+                url: 'https://www.example.com/tainan-old-town-food-tour'
+            },
+            {
+                title: '墾丁國家公園海岸生態與船潛半日遊',
+                location: '墾丁',
+                price: 'from NT$1,500 per adult',
+                rating: '4.7',
+                category: 'Water',
+                url: 'https://www.example.com/kenting-eco-boat-tour'
+            }
+            ,{
+                title: '台北夜市美食巡禮：士林 & 通化',
+                location: '台北',
+                price: 'from NT$800 per adult',
+                rating: '4.8',
+                category: 'Food',
+                url: 'https://www.example.com/taipei-night-market-food'
+            },{
+                title: '台南美食古蹟一日遊（含安平港與赤崁樓）',
+                location: '台南',
+                price: 'from NT$1,200 per adult',
+                rating: '4.9',
+                category: 'Culture',
+                url: 'https://www.example.com/tainan-food-history'
+            },{
+                title: '花蓮賞鯨與太魯閣半日體驗',
+                location: '花蓮',
+                price: 'from NT$2,000 per adult',
+                rating: '4.9',
+                category: 'Outdoors',
+                url: 'https://www.example.com/hualien-whale-taroko'
+            },{
+                title: '澎湖跳島一日遊（含七美、望安）',
+                location: '澎湖',
+                price: 'from NT$2,500 per adult',
+                rating: '4.8',
+                category: 'Water',
+                url: 'https://www.example.com/penghu-islands'
+            }
+        ];
+
+        function getRecommendedTours(location, vibe) {
+            // 優先抓取同縣市/相近地點的建議，並去重
+            const matchedByLocation = webSuggestions.filter(item => item.location.includes(location));
+            const unique = (arr) => Array.from(new Map(arr.map(i => [i.title, i])).values());
+            if (matchedByLocation.length > 0) return unique(matchedByLocation).slice(0, 6);
+            const preferred = vibe.includes('熱鬧') ? ['Food','Culture','Outdoors'] : ['Water','Culture','Food'];
+            return unique(webSuggestions.filter(item => preferred.includes(item.category))).slice(0, 6);
+        }
+
+        const itineraryTemplates = {
+            '台北': [
+                {morning: '九份老街漫步', lunch: '九份芋圓、茶樓', afternoon: '金瓜石黃金博物園區', sunset: '基隆港景觀', dinner: '基隆廟口天婦羅&海鮮'},
+                {morning: '中正紀念堂衛兵交接儀式', lunch: '信義區鼎泰豐小籠包', afternoon: '故宮博物院文化巡禮', sunset: '信義區101夜景', dinner: '信義區微風廣場美食街'},
+                {morning: '淡水漁人碼頭', lunch: '淡水阿給', afternoon: '真理大學校園&淡水老街', sunset: '淡水河畔看夕陽', dinner: '淡水魚丸湯&鐵蛋'}
+            ],
+            '台中': [
+                {morning: '彩虹眷村打卡拍照', lunch: '彩虹眷村周邊小吃', afternoon: '國立自然科學博物館', sunset: '科博館廣場', dinner: '逢甲夜市大腸包小腸'},
+                {morning: '高美濕地濕地生態散步', lunch: '高美濕地附近海鮮小吃', afternoon: '草悟道文青街區&審計新村', sunset: '天橋夕陽景觀', dinner: '宮原眼科冰淇淋&甜點'}
+            ],
+            '台南': [
+                {morning: '安平古堡與運河', lunch: '安平豆花、蝦捲', afternoon: '安平老街古蹟群', sunset: '安平夕照', dinner: '度小月擔仔麵&周氏蝦捲'},
+                {morning: '赤崁樓歷史巡禮', lunch: '台南碗粿、蕃茄湯', afternoon: '林百貨文創逛街', sunset: '林百貨屋頂觀景', dinner: '鹹粥與炸雞'}
+            ],
+            '高雄': [
+                {morning: '旗津海岸電動車', lunch: '旗津海邊海鮮小吃', afternoon: '旗津老街逛街&海邊漫步', sunset: '旗津海灘看夕陽', dinner: '六合夜市海鮮粥&牡蠣'},
+                {morning: '佛陀紀念館參拜&園區導覽', lunch: '佛館齋菜&素食餐廳', afternoon: '駁二藝術特區打卡', sunset: '駁二夜景', dinner: '鹽埕埔肉燥飯&豬腳'}
+            ],
+            '花蓮': [
+                {morning: '太魯閣國家公園燕子口步道', lunch: '太魯閣遊客中心或布洛灣小吃', afternoon: '清水斷崖景觀台', sunset: '蘇花公路海景', dinner: '東大門夜市扁食&炸蛋蔥油餅'},
+                {morning: '七星潭海景', lunch: '七星潭海邊小吃', afternoon: '慕谷慕魚步道水景', sunset: '海邊看日落', dinner: '原住民風味餐&烤肉'}
+            ],
+            '宜蘭': [
+                {morning: '羅東林場參觀', lunch: '羅東林場週邊小吃', afternoon: '宜蘭傳藝中心文化體驗', sunset: '傳藝中心夜景', dinner: '三星蔥油餅&鴨賞'},
+                {morning: '冬山河親水公園', lunch: '冬山河畔簡餐', afternoon: '礁溪溫泉泡湯', sunset: '溫泉區夜景', dinner: '礁溪溫泉豆花&海鮮'}
+            ],
+            '澎湖': [
+                {morning: '澎湖跨海大橋', lunch: '馬公漁港海鮮', afternoon: '馬公老街文創', sunset: '澎湖港灣', dinner: '仙人掌冰&花枝丸'},
+                {morning: '七美雙心石滬', lunch: '七美島上小吃', afternoon: '澎湖遊艇出海浮潛', sunset: '海上看日落', dinner: '後壁湖生魚片&海產'}
+            ],
+            '墾丁': [
+                {morning: '海生館', lunch: '山下人家或恆春鎮餐廳', afternoon: '鹿ㄦ島水豚生態園區或鹿境梅花鹿園區', sunset: '萬里桐或關山看日落', dinner: '後壁湖生魚片&海產餐廳'},
+                {morning: '南灣海灘', lunch: '南灣海邊海鮮小吃', afternoon: '貓鼻頭公園', sunset: '船帆石海景', dinner: '恆春鎮古城牛肉火鍋&美食'}
+            ]
+        };
+
+        // 更多在地景點資料，用於補充與避免重複
+        const localAttractions = {
+            '台北': ['九份老街','基隆廟口','士林夜市','中正紀念堂','台北101觀景台','淡水漁人碼頭','故宮博物院','華山文創園區'],
+            '台中': ['彩虹眷村','逢甲夜市','高美濕地','國立自然科學博物館','草悟道','宮原眼科'],
+            '台南': ['安平古堡','赤崁樓','花園夜市','林百貨','台南孔廟','武廟小吃街'],
+            '高雄': ['旗津海岸','駁二藝術特區','六合夜市','佛陀紀念館','壽山動物園'],
+            '花蓮': ['太魯閣國家公園','清水斷崖','七星潭','東大門夜市','慕谷慕魚'],
+            '宜蘭': ['羅東林場','傳藝中心','礁溪溫泉','冬山河親水公園','蘇澳冷泉'],
+            '澎湖': ['跨海大橋','七美雙心石滬','馬公老街','澎湖風櫃洞','澎湖海上活動'],
+            '墾丁': ['海生館','船帆石','南灣沙灘','關山日落','後壁湖']
+        };
+
+        function buildItinerary(location, days) {
+            const template = itineraryTemplates[location] || itineraryTemplates['台北'];
+            const attractions = localAttractions[location] || [];
+            const foods = localFoods[location] || [];
+            const used = new Set();
+            const plan = [];
+
+            // helper to pick next unused item from array
+            function pickNext(arr, idx) {
+                if (!arr || arr.length === 0) return '';
+                for (let i = 0; i < arr.length; i++) {
+                    const cand = arr[(idx + i) % arr.length];
+                    if (!used.has(cand)) return cand;
+                }
+                // fallback to rotating
+                return arr[idx % arr.length];
+            }
+
+            let tIdx = 0, aIdx = 0, fIdx = 0;
+            for (let d = 1; d <= days; d++) {
+                // try to find a template entry that doesn't repeat key items
+                let entry = null;
+                for (let i = 0; i < template.length; i++) {
+                    const cand = template[(tIdx + i) % template.length];
+                    const score = [cand.morning, cand.afternoon, cand.dinner].filter(x => used.has(x)).length;
+                    if (score === 0) { entry = cand; tIdx = (tIdx + i + 1) % template.length; break; }
+                }
+
+                if (!entry) {
+                    // build a generated entry from attractions and foods
+                    const morning = pickNext(attractions, aIdx) || '在地漫遊';
+                    aIdx++;
+                    const lunch = pickNext(foods, fIdx) || '在地小吃';
+                    fIdx++;
+                    const afternoon = pickNext(attractions, aIdx) || morning;
+                    aIdx++;
+                    const sunset = '觀賞落日/景觀點';
+                    const dinner = pickNext(foods, fIdx) || lunch;
+                    fIdx++;
+                    entry = { morning, lunch, afternoon, sunset, dinner };
+                }
+
+                // mark used tokens to reduce repetition
+                ['morning','afternoon','dinner'].forEach(k => { if(entry[k]) used.add(entry[k]); });
+                plan.push({ day: d, ...entry });
+            }
+            return plan;
+        }
+
+        const localFoods = {
+            '台北': ['鼎泰豐小籠包', '基隆廟口天婦羅', '淡水阿給', '士林大香腸', '永康街牛肉麵', '通化街夜市小吃', '台北米其林小吃'],
+            '台中': ['逢甲大腸包小腸', '宮原眼科冰淇淋', '太陽餅', '第二市場肉圓', '一中街小吃'],
+            '台南': ['度小月擔仔麵', '周氏蝦捲', '碗粿', '棺材板', '安平豆花', '台南牛肉湯'],
+            '高雄': ['六合夜市海鮮粥', '肉燥飯', '旗津海鮮', '瑞豐夜市小吃', '鹽埕區現炒'],
+            '花蓮': ['東大門扁食', '炸蛋蔥油餅', '原住民風味餐', '公正包子', '花蓮海產店'],
+            '宜蘭': ['三星蔥油餅', '鴨賞', '礁溪溫泉豆花', '羅東夜市特色小吃'],
+            '澎湖': ['花枝丸', '仙人掌冰', '海鮮燒烤', '馬公海產粥', '澎湖小卷'],
+            '墾丁': ['海鮮大餐', '炸飛魚', '椰子水', '後壁湖生魚片', '恆春小吃']
+        };
+
+        function getAccommodationSuggestion(location, group, budget) {
+            const defaults = {
+                '台北': '市中心商務酒店或精品設計旅店',
+                '台中': '文青旅店或逢甲週邊商務酒店',
+                '台南': '古城風格民宿或文化旅店',
+                '高雄': '港灣景觀飯店或城市旅店',
+                '花蓮': '海景民宿或溫泉度假村',
+                '宜蘭': '礁溪溫泉飯店或親子民宿',
+                '澎湖': '海景民宿或海島渡假村',
+                '墾丁': '海濱度假飯店或親子渡假村'
+            };
+
+            let suggestion = defaults[location] || '市區飯店或民宿';
+
+            if (budget < 2000) {
+                if (group.includes('一群朋友')) suggestion = '背包客棧或青年旅館';
+                else if (group.includes('學生團體')) suggestion = '膠囊旅館或經濟型旅館';
+                else if (group.includes('獨旅')) suggestion = '膠囊旅館或精緻背包客棧';
+                else suggestion = '平價民宿或經濟旅店';
+            } else if (budget < 4000) {
+                if (group.includes('一群朋友')) suggestion = '青年旅館或舒適民宿';
+                else if (group.includes('學生團體')) suggestion = '商務旅店或民宿';
+                else if (group.includes('多對情侶')) suggestion = '溫馨民宿或設計旅店';
+                else if (group.includes('獨旅')) suggestion = '商務旅店或青年旅館';
+                else suggestion = '家庭民宿或舒適旅店';
+            } else {
+                if (group.includes('一群朋友')) suggestion = '精品旅店或設計民宿';
+                else if (group.includes('學生團體')) suggestion = '精選設計旅店';
+                else if (group.includes('多對情侶')) suggestion = '精品酒店或浪漫民宿';
+                else if (group.includes('跨代家族')) suggestion = '家庭友善渡假村或豪華民宿';
+                else if (group.includes('獨旅')) suggestion = '精品酒店或設計民宿';
+                else suggestion = '精品酒店或頂級民宿';
+            }
+            return suggestion;
+        }
+
+        function getAdaptiveFoods(location, budget) {
+            const allFoods = {
+                '台北': {
+                    budget: ['基隆廟口小食', '九份芋圓'],
+                    mid: ['鼎泰豐小籠包', '信義區美食街'],
+                    premium: ['米其林餐廳', '信義高級料理']
+                },
+                '台中': {
+                    budget: ['逢甲夜市小吃', '太陽餅'],
+                    mid: ['彩虹眷村周邊', '宮原眼科冰淇淋'],
+                    premium: ['頂級火鍋', '精選茶餐廳']
+                },
+                '台南': {
+                    budget: ['碗粿、蕃茄湯', '古早味小食'],
+                    mid: ['度小月擔仔麵', '周氏蝦捲'],
+                    premium: ['古城高級餐廳', '海邊無菜單料理']
+                },
+                '高雄': {
+                    budget: ['六合夜市', '肉燥飯'],
+                    mid: ['海鮮粥、牡蠣', '旗津海鮮小吃'],
+                    premium: ['港灣景觀餐廳', '高級海鮮料理']
+                },
+                '花蓮': {
+                    budget: ['東大門夜市', '炸蛋蔥油餅'],
+                    mid: ['扁食、原住民小吃', '太魯閣便當'],
+                    premium: ['原住民特色料理', '海邊高級海鮮']
+                },
+                '宜蘭': {
+                    budget: ['三星蔥油餅', '平價小吃'],
+                    mid: ['鴨賞、溫泉豆花', '當地特色餐廳'],
+                    premium: ['溫泉會席料理', '頂級海鮮']
+                },
+                '澎湖': {
+                    budget: ['仙人掌冰、花枝丸'],
+                    mid: ['馬公海鮮小吃', '花枝料理'],
+                    premium: ['澎湖頂級海鮮', '無菜單海邊料理']
+                },
+                '墾丁': {
+                    budget: ['恆春古鎮小食', '平價海鮮'],
+                    mid: ['山下人家', '海邊海鮮餐廳'],
+                    premium: ['後壁湖頂級生魚片', '高級渡假村料理']
+                }
+            };
+
+            const locationFoods = allFoods[location] || allFoods['台北'];
+            let foods;
+            if (budget < 2000) {
+                foods = locationFoods.budget || locationFoods.mid || locationFoods.premium;
+            } else if (budget < 4000) {
+                foods = locationFoods.mid || locationFoods.budget || locationFoods.premium;
+            } else {
+                foods = locationFoods.premium || locationFoods.mid || locationFoods.budget;
+            }
+            // 去重並回傳
+            return Array.from(new Set(foods));
+        }
+
+        function renderWebRecommendations(vibe, location = '台北') {
+            const container = document.getElementById('web-recommendations');
+            if(!container) return;
+            const recommendations = getRecommendedTours(location, vibe);
+            container.innerHTML = recommendations.map(item => `
+                <div class="recommendation-card">
+                    <h4>${item.title}</h4>
+                    <p>地點：${item.location}</p>
+                    <p>評分：${item.rating} / 5</p>
+                    <p>價格：${item.price}</p>
+                    <a href="${item.url}" target="_blank" rel="noreferrer">查看更多</a>
+                </div>
+            `).join('');
+        }
+
+        renderWebRecommendations('熱鬧', '台北');
+
+        document.getElementById('generate-itinerary').addEventListener('click', function(){
+            const budget = Number((document.getElementById('budget-slider') || {value:3000}).value || 3000);
+            const location = (document.getElementById('trip-location') || {value:'台北'}).value;
+            const tripDays = Math.max(1, Math.min(7, Number((document.getElementById('trip-days') || {value:3}).value || 3)));
+            const vibeEls = document.getElementsByName('vibe');
+            let vibe = '';
+            for(const v of vibeEls) if(v.checked) { vibe = v.parentElement.textContent.trim(); break; }
+            if(!vibe) vibe = '未指定';
+            renderWebRecommendations(vibe, location);
+            const amenities = Array.from(document.querySelectorAll('.amenities-grid input[type=checkbox]'))
+                .filter(i=>i.checked)
+                .map(i=>i.parentElement.textContent.trim());
+            const groupSelect = document.getElementById('group-type');
+            const group = groupSelect ? groupSelect.value : '未指定';
+
+            const days = tripDays;
+            const recommendedTours = getRecommendedTours(location, vibe);
+            const staySuggestion = getAccommodationSuggestion(location, group, budget);
+            const itineraryPlan = buildItinerary(location, days);
+            const localFoodList = getAdaptiveFoods(location, budget);
+
+            let html = '<h3 style="color:var(--primary-blue); margin-top:0;">旅遊行程建議</h3>';
+            html += `<p>地點：${location} · 預算：每人/每晚 NT$${budget} · ${days} 天 · 旅伴：${group}</p>`;
+            if(recommendedTours.length > 0) {
+                html += '<h4 style="margin-bottom:0.5rem;">根據旅遊網站整合推薦</h4>';
+                html += '<ul>' + recommendedTours.map(item => `<li><strong>${item.title}</strong> (${item.location}) - ${item.price}</li>`).join('') + '</ul>';
+            }
+
+            html += '<h4 style="margin-bottom:0.5rem;">詳細行程安排</h4>';
+            itineraryPlan.forEach(day => {
+                html += `<h5>第 ${day.day} 天</h5><ul>`;
+                html += `<li><strong>早上：</strong>${day.morning}</li>`;
+                html += `<li><strong>午餐：</strong>${day.lunch}</li>`;
+                html += `<li><strong>下午：</strong>${day.afternoon}</li>`;
+                html += `<li><strong>日落：</strong>${day.sunset}</li>`;
+                html += `<li><strong>晚餐：</strong>${day.dinner}</li>`;
+                html += '</ul>';
+            });
+            html += `<p><strong>推薦美食：</strong>${localFoodList.join('、')}</p>`;
+            html += `<p><strong>建議住宿類型：</strong>${staySuggestion}</p>`;
+            html += '<p><strong>費用小提醒：</strong>以上為參考建議，實際價格視淡旺季與人數而定。</p>';
+
+            const result = document.getElementById('itinerary-result');
+            result.innerHTML = html;
+            result.style.display = 'block';
+            result.scrollIntoView({behavior: 'smooth'});
+        });
+        </script>
+
+</body>
+</html>
